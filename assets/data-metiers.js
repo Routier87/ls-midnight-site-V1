@@ -1,20 +1,22 @@
-window.LS_METIERS = [
+window.LS_METIERS_V1 = [
   {
-    id: "lscustom",
-    name: "LS Custom",
-    description: "Mécanique, réparations, customisation (selon vos règles RP).",
-    discordRoleId: "A_METTRE_PLUS_TARD",
-    members: [
-      { name: "Synchronisation Discord plus tard" }
-    ]
+    name: "Métiers Publics",
+    icon: "🏛️",
+    jobs: [
+      { name: "LSPD", emoji: "🚓" },
+      { name: "Casino", emoji: "🎰" },
+    ],
   },
+
   {
-    id: "concessionnaire",
-    name: "Concessionnaire",
-    description: "Vente de véhicules (selon vos règles RP).",
-    discordRoleId: "A_METTRE_PLUS_TARD",
-    members: [
-      { name: "Synchronisation Discord plus tard" }
-    ]
-  }
+    name: "Métiers Légaux",
+    icon: "✅",
+    jobs: [
+      { name: "LS Custom", emoji: "🔧" },
+      { name: "Concessionnaire Voiture", emoji: "🚗" },
+      { name: "Concessionnaire Moto", emoji: "🏍️" },
+      { name: "Concessionnaire Avion", emoji: "✈️" },
+      { name: "Concessionnaire Bateau", emoji: "🛥️" },
+    ],
+  },
 ];
