@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Musiques - LS Midnight</title>
+  <link rel="stylesheet" href="assets/style.css" />
+  <script defer src="assets/data-musiques.js"></script>
+  <script defer src="assets/app.js"></script>
+</head>
+<body>
+  <header class="nav">
+    <div class="container">
+      <div class="nav-inner">
+        <a class="brand" href="index.html">
+          <div class="logo"></div>
+          <div>
+            <div class="brand-title">LS Midnight : Roleplay</div>
+            <div class="brand-sub">Musiques</div>
+          </div>
+        </a>
+        <nav class="links">
+          <a class="link" href="index.html">Accueil</a>
+          <a class="link" href="reglement-rp.html">Règlement RP</a>
+          <a class="link" href="reglement-discord.html">Règlement Discord</a>
+          <a class="link" href="metiers.html">Métiers</a>
+          <a class="link" href="candidature.html">Candidature</a>
+          <a class="link" href="boutique.html">Boutique</a>
+        </nav>
+        <a class="btn btn-red" target="_blank" rel="noreferrer" href="https://discord.gg/ctzPkVGn5K">Rejoindre Discord</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="container">
+      <h1>Musiques du serveur</h1>
+      <p class="small">Ajoute tes playlists dans <code>assets/data-musiques.js</code></p>
+
+      <div id="music-list" class="grid" style="margin-top:16px;"></div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container" style="display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center;">
+      <div>© <span data-year></span> LS Midnight : Roleplay</div>
+      <div><a href="https://discord.gg/ctzPkVGn5K" target="_blank" rel="noreferrer">Discord</a></div>
+    </div>
+  </footer>
+
+  <script>
+    const list = document.getElementById("music-list");
+    const items = window.LS_MUSIQUES || [];
+
+    if (!items.length) {
+      list.innerHTML = `<div class="card"><div class="card-title">Aucune musique</div><p>Ajoute une playlist dans <code>assets/data-musiques.js</code>.</p></div>`;
+    } else {
+      list.innerHTML = items.map(m => `
+        <div class="card">
+          <div class="card-title">${m.title}</div>
+          <div class="embed" style="margin-top:10px;">
+            <iframe src="${m.embedUrl}" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+          </div>
+        </div>
+      `).join("");
+    }
+  </script>
+</body>
+</html>
