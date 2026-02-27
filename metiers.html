@@ -3,76 +3,65 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Métiers - LS Midnight</title>
+  <title>Métiers - LS Midnight : Roleplay</title>
   <link rel="stylesheet" href="assets/style.css" />
-  <script defer src="assets/data-metiers.js"></script>
+  <script defer src="assets/data-metiers-v2.js"></script>
   <script defer src="assets/app.js"></script>
 </head>
-<body>
-  <header class="nav">
+
+<body class="jobs-hero">
+  <main class="jobs-wrap">
     <div class="container">
-      <div class="nav-inner">
-        <a class="brand" href="index.html">
-          <div class="logo"></div>
-          <div>
-            <div class="brand-title">LS Midnight : Roleplay</div>
-            <div class="brand-sub">Métiers</div>
-          </div>
-        </a>
-        <nav class="links">
-          <a class="link" href="index.html">Accueil</a>
-          <a class="link" href="reglement-rp.html">Règlement RP</a>
-          <a class="link" href="reglement-discord.html">Règlement Discord</a>
-          <a class="link" href="musiques.html">Musiques</a>
-          <a class="link" href="candidature.html">Candidature</a>
-          <a class="link" href="boutique.html">Boutique</a>
-        </nav>
-        <a class="btn btn-red" target="_blank" rel="noreferrer" href="https://discord.gg/ctzPkVGn5K">Rejoindre Discord</a>
+
+      <div class="jobs-title">
+        <span class="emoji">💼</span>
+        <div>Liste des Métiers —<br/>LS Midnight : Roleplay</div>
       </div>
-    </div>
-  </header>
 
-  <main class="main">
-    <div class="container">
-      <h1>Métiers</h1>
-      <p class="small">
-        V1 : affichage manuel via <code>assets/data-metiers.js</code>.
-        Plus tard : sync automatique avec Discord (rôles → membres).
-      </p>
+      <div class="jobs-stack">
 
-      <div id="jobs" class="grid grid-3" style="margin-top:16px;"></div>
+        <!-- LÉGENDE -->
+        <section class="panel">
+          <h2><span class="icon">📄</span> Métier Mémoire</h2>
+          <div class="legend">
+            <div class="legend-row">
+              <span style="width:10px;text-align:center;margin-top:1px;">⚠️</span>
+              <div><b>En cours de développement</b> — Le métier est en préparation.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- CATÉGORIES -->
+        <div id="jobs-container"></div>
+
+      </div>
     </div>
   </main>
 
-  <footer class="footer">
-    <div class="container" style="display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center;">
-      <div>© <span data-year></span> LS Midnight : Roleplay</div>
-      <div><a href="https://discord.gg/ctzPkVGn5K" target="_blank" rel="noreferrer">Discord</a></div>
-    </div>
-  </footer>
-
   <script>
-    const wrap = document.getElementById("jobs");
-    const metiers = window.LS_METIERS || [];
+    // Affichage : tous les métiers sont "En cours de développement"
+    const root = document.getElementById("jobs-container");
+    const categories = window.LS_METIERS_V1 || [];
 
-    if (!metiers.length) {
-      wrap.innerHTML = `<div class="card"><div class="card-title">Aucun métier</div><p>Ajoute des métiers dans <code>assets/data-metiers.js</code>.</p></div>`;
-    } else {
-      wrap.innerHTML = metiers.map(m => `
-        <div class="card">
-          <div class="card-title">${m.name}</div>
-          <p>${m.description}</p>
-          <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
-            <span class="badge">Membres: ${m.members?.length || 0}</span>
-            <span class="badge">Discord: ${m.discordRoleId ? "prêt" : "à config"}</span>
-          </div>
-          <div style="margin-top:12px;">
-            <div class="small" style="margin-bottom:6px;">Liste:</div>
-            ${(m.members||[]).map(mem => `<div class="small">• ${mem.name}</div>`).join("")}
-          </div>
+    root.innerHTML = categories.map(cat => `
+      <section class="panel">
+        <h2>
+          <span class="icon">${cat.icon || "📌"}</span>
+          ${cat.name}
+          <span class="badge" style="margin-left:10px;">${(cat.jobs||[]).length} métiers</span>
+        </h2>
+
+        <div class="jobs-list">
+          ${(cat.jobs || []).map(j => `
+            <div class="job-item">
+              <div class="bullet">${j.emoji || "•"}</div>
+              <div class="name">${j.name}</div>
+              <div class="status" style="color:#fbbf24;">⚠️ En cours</div>
+            </div>
+          `).join("")}
         </div>
-      `).join("");
-    }
+      </section>
+    `).join("");
   </script>
 </body>
 </html>
