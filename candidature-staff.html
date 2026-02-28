@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Candidature Staff - LS Midnight</title>
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+
+<header class="nav">
+  <div class="container">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <img src="images/logo.png" alt="Logo" class="logo-img">
+        <div>
+          <div class="brand-title">LS Midnight : Roleplay</div>
+          <div class="brand-sub">Candidature Staff</div>
+        </div>
+      </a>
+
+      <nav class="links">
+        <a class="link" href="index.html">Accueil</a>
+        <a class="link" href="candidature.html">Candidature RP</a>
+      </nav>
+
+      <a class="btn btn-red" target="_blank" href="https://discord.gg/ctzPkVGn5K">Discord</a>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+  <div class="container">
+    <h1>🛡 Candidature Staff</h1>
+
+    <div class="card" style="margin-top:16px;">
+      <form id="form">
+
+        <div class="row">
+          <div>
+            <label class="small">Pseudo Discord</label>
+            <input class="input" name="discord" required>
+          </div>
+          <div>
+            <label class="small">Âge</label>
+            <input class="input" type="number" name="age" required>
+          </div>
+        </div>
+
+        <div style="margin-top:12px;">
+          <label class="small">Depuis combien de temps es-tu sur le serveur ?</label>
+          <input class="input" name="anciennete" required>
+        </div>
+
+        <div style="margin-top:12px;">
+          <label class="small">As-tu déjà été staff ailleurs ?</label>
+          <textarea class="textarea" name="experience" required></textarea>
+        </div>
+
+        <div style="margin-top:12px;">
+          <label class="small">Pourquoi veux-tu devenir staff ?</label>
+          <textarea class="textarea" name="motivation" required></textarea>
+        </div>
+
+        <div style="margin-top:12px;">
+          <label class="small">Tes disponibilités</label>
+          <textarea class="textarea" name="disponibilite" required></textarea>
+        </div>
+
+        <div style="margin-top:14px;">
+          <button class="btn btn-red" type="submit">Envoyer</button>
+        </div>
+
+        <div id="msg" class="small" style="margin-top:10px;"></div>
+
+      </form>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    © 2026 LS Midnight : Roleplay
+  </div>
+</footer>
+
+<script>
+const WEBHOOK_URL = "https://discord.com/api/webhooks/1477346001521213520/Q8pvh4_cNsXjprXCWF16nsN3r34YohhSPSbAhOnX1aJhXa_eB0frXCnhKZwjrgJQUVDq";
+
+document.getElementById("form").addEventListener("submit", async function(e){
+  e.preventDefault();
+
+  const msg = document.getElementById("msg");
+  msg.textContent = "⏳ Envoi en cours...";
+
+  const data = new FormData(this);
+
+  const payload = {
+    username: "LS Midnight • Staff",
+    embeds: [{
+      title: "🛡 Nouvelle Candidature Staff",
+      color: 3066993, // vert staff
+      fields: [
+        { name: "Discord", value: data.get("discord") },
+        { name: "Âge", value: data.get("age") },
+        { name: "Ancienneté", value: data.get("anciennete") },
+        { name: "Expérience Staff", value: data.get("experience").slice(0,1024) },
+        { name: "Motivation", value: data.get("motivation").slice(0,1024) },
+        { name: "Disponibilités", value: data.get("disponibilite").slice(0,1024) }
+      ],
+      timestamp: new Date().toISOString()
+    }]
+  };
+
+  try{
+    const res = await fetch(WEBHOOK_URL,{
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    if(!res.ok) throw new Error();
+
+    msg.textContent = "✅ Candidature Staff envoyée !";
+    this.reset();
+  }catch{
+    msg.textContent = "❌ Erreur envoi webhook.";
+  }
+});
+</script>
+
+</body>
+</html>
