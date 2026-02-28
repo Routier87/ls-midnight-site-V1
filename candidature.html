@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Candidature (Waitlist) - LS Midnight</title>
+  <title>Candidature - LS Midnight</title>
   <link rel="stylesheet" href="assets/style.css" />
   <script defer src="assets/app.js"></script>
 </head>
@@ -12,36 +12,37 @@
     <div class="container">
       <div class="nav-inner">
         <a class="brand" href="index.html">
-          <div class="logo"></div>
+          <img src="images/logo.png" alt="Logo LS Midnight" class="logo-img">
           <div>
             <div class="brand-title">LS Midnight : Roleplay</div>
-            <div class="brand-sub">Candidature (Waitlist)</div>
+            <div class="brand-sub">Candidature Waitlist</div>
           </div>
         </a>
+
         <nav class="links">
           <a class="link" href="index.html">Accueil</a>
           <a class="link" href="reglement-rp.html">Règlement RP</a>
           <a class="link" href="reglement-discord.html">Règlement Discord</a>
-          <a class="link" href="musiques.html">Musiques</a>
           <a class="link" href="metiers.html">Métiers</a>
           <a class="link" href="boutique.html">Boutique</a>
         </nav>
-        <a class="btn btn-red" target="_blank" rel="noreferrer" href="https://discord.gg/ctzPkVGn5K">Rejoindre Discord</a>
+
+        <a class="btn btn-red" target="_blank" rel="noreferrer" href="https://discord.gg/ctzPkVGn5K">Discord</a>
       </div>
     </div>
   </header>
 
   <main class="main">
     <div class="container">
-      <h1>Candidature RP (Waitlist)</h1>
-      <p class="small">V1 : stockage local (sur le PC du joueur). V2 : envoi vers Discord / base de données.</p>
+      <h1>📝 Candidature RP (Waitlist)</h1>
+      <p class="small">V1 : candidature enregistrée sur ton PC (local). V2 : envoi Discord / base de données.</p>
 
       <div class="card" style="margin-top:16px;">
         <form id="form">
           <div class="row">
             <div>
               <label class="small">Pseudo Discord</label>
-              <input class="input" name="discord" placeholder="ex: MonPseudo#0000" required />
+              <input class="input" name="discord" placeholder="ex: MonPseudo" required />
             </div>
             <div>
               <label class="small">Âge</label>
@@ -67,12 +68,12 @@
 
           <div style="margin-top:12px;">
             <label class="small">Motivation</label>
-            <textarea class="textarea" name="motivation" placeholder="Explique pourquoi tu veux rejoindre LS Midnight..." required></textarea>
+            <textarea class="textarea" name="motivation" required></textarea>
           </div>
 
           <div style="margin-top:12px;">
             <label class="small">Background RP (résumé)</label>
-            <textarea class="textarea" name="background" placeholder="Histoire rapide du personnage..." required></textarea>
+            <textarea class="textarea" name="background" required></textarea>
           </div>
 
           <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;">
@@ -89,7 +90,7 @@
   </main>
 
   <footer class="footer">
-    <div class="container" style="display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center;">
+    <div class="container" style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;">
       <div>© <span data-year></span> LS Midnight : Roleplay</div>
       <div><a href="https://discord.gg/ctzPkVGn5K" target="_blank" rel="noreferrer">Discord</a></div>
     </div>
@@ -111,24 +112,6 @@
       localStorage.setItem(key, JSON.stringify(arr));
     }
 
-    function render(){
-      const items = getAll().slice().reverse();
-      if (!items.length){
-        list.innerHTML = "";
-        return;
-      }
-      list.innerHTML = items.map(c => `
-        <div class="card">
-          <div class="card-title">${c.nomrp} <span class="badge" style="margin-left:8px;">${c.status}</span></div>
-          <div class="small">Discord: ${c.discord} • Âge: ${c.age} • XP: ${c.xp}</div>
-          <hr class="hr"/>
-          <div class="small"><b>Motivation:</b> ${escapeHtml(c.motivation).slice(0,240)}...</div>
-          <div class="small" style="margin-top:6px;"><b>Background:</b> ${escapeHtml(c.background).slice(0,240)}...</div>
-          <div class="small" style="margin-top:10px;opacity:.75;">Envoyée le: ${new Date(c.createdAt).toLocaleString()}</div>
-        </div>
-      `).join("");
-    }
-
     function escapeHtml(str){
       return String(str)
         .replaceAll("&","&amp;")
@@ -136,6 +119,22 @@
         .replaceAll(">","&gt;")
         .replaceAll('"',"&quot;")
         .replaceAll("'","&#039;");
+    }
+
+    function render(){
+      const items = getAll().slice().reverse();
+      if (!items.length){ list.innerHTML=""; return; }
+
+      list.innerHTML = items.map(c => `
+        <div class="card">
+          <div class="card-title">${escapeHtml(c.nomrp)} <span class="badge" style="margin-left:8px;">${c.status}</span></div>
+          <div class="small">Discord: ${escapeHtml(c.discord)} • Âge: ${escapeHtml(c.age)} • XP: ${escapeHtml(c.xp)}</div>
+          <hr class="hr"/>
+          <div class="small"><b>Motivation:</b> ${escapeHtml(c.motivation).slice(0,240)}...</div>
+          <div class="small" style="margin-top:6px;"><b>Background:</b> ${escapeHtml(c.background).slice(0,240)}...</div>
+          <div class="small" style="margin-top:10px;opacity:.75;">Envoyée le: ${new Date(c.createdAt).toLocaleString()}</div>
+        </div>
+      `).join("");
     }
 
     form.addEventListener("submit", (e) => {
