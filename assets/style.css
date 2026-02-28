@@ -9,7 +9,31 @@
 }
 
 *{ box-sizing:border-box; }
-html,body{ margin:0; padding:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial; background:var(--bg); color:var(--text); }
+
+html,body{
+  margin:0;
+  padding:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial;
+  color:var(--text);
+
+  /* ✅ FOND IMAGE */
+  background-image: url("../images/background.jpeg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* ✅ Overlay sombre sur toute la page pour garder la lisibilité */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background: rgba(0,0,0,.55);
+  pointer-events:none;
+  z-index:-1;
+}
+
 a{ color:inherit; text-decoration:none; }
 code{ background:#111827; padding:.15rem .35rem; border-radius:.5rem; border:1px solid #1f2937; }
 
@@ -22,8 +46,23 @@ code{ background:#111827; padding:.15rem .35rem; border-radius:.5rem; border:1px
   backdrop-filter: blur(10px);
 }
 .nav-inner{ display:flex; align-items:center; justify-content:space-between; padding:14px 0; gap:12px; }
+
 .brand{ display:flex; align-items:center; gap:12px; }
+
+/* ✅ Ancien logo rouge (tu peux le garder si tu veux) */
 .logo{ width:36px; height:36px; border-radius:14px; background:var(--red); box-shadow:0 10px 30px rgba(220,38,38,.25); }
+
+/* ✅ NOUVEAU : Logo image */
+.logo-img{
+  width:42px;
+  height:42px;
+  object-fit:contain;
+  border-radius:12px;
+  background: rgba(0,0,0,.25);
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:0 10px 30px rgba(0,0,0,.35);
+}
+
 .brand-title{ font-weight:800; line-height:1.1; }
 .brand-sub{ font-size:12px; color:var(--muted); }
 
@@ -63,6 +102,7 @@ p{ color:#d4d4d8; line-height:1.5; }
   border-radius:18px;
   padding:16px;
   box-shadow:0 10px 30px rgba(0,0,0,.25);
+  backdrop-filter: blur(6px);
 }
 .card-title{ font-weight:800; margin-bottom:8px; }
 
@@ -78,6 +118,8 @@ p{ color:#d4d4d8; line-height:1.5; }
   padding:26px 0;
   color:var(--muted);
   font-size:13px;
+  background: rgba(0,0,0,.25);
+  backdrop-filter: blur(6px);
 }
 
 .input, .textarea, .select{
