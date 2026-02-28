@@ -1,22 +1,21 @@
-window.LS_METIERS_V1 = [
+window.LS_METIERS = [
   {
-    name: "Métiers Publics",
+    category: "Métiers Publics",
     icon: "🏛️",
     jobs: [
       { name: "LSPD", emoji: "🚓" },
-      { name: "Casino", emoji: "🎰" },
-    ],
+      { name: "Casino", emoji: "🎰" }
+    ]
   },
-
   {
-    name: "Métiers Légaux",
+    category: "Métiers Légaux",
     icon: "✅",
     jobs: [
       { name: "LS Custom", emoji: "🔧" },
       { name: "Concessionnaire Voiture", emoji: "🚗" },
       { name: "Concessionnaire Moto", emoji: "🏍️" },
       { name: "Concessionnaire Avion", emoji: "✈️" },
-      { name: "Concessionnaire Bateau", emoji: "🛥️" },
-    ],
-  },
+      { name: "Concessionnaire Bateau", emoji: "🛥️" }
+    ]
+  }
 ];
