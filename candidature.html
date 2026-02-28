@@ -1,118 +1,195 @@
-<script>
-  const WEBHOOK_URL = "https://discord.com/api/webhooks/1477320308351439001/mvklhBTHHPBnHnZZOEBmnFir6kFLJncOwI6OdZ8muVysyZdNs6XQtVF90mvPJmFWSRs6";
+<!doctype html> 
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Candidature - LS Midnight</title>
+  <link rel="stylesheet" href="assets/style.css" />
+  <script defer src="assets/app.js"></script>
+</head>
+<body>
+  <header class="nav">
+    <div class="container">
+      <div class="nav-inner">
+        <a class="brand" href="index.html">
+          <img src="images/logo.png" alt="Logo LS Midnight" class="logo-img">
+          <div>
+            <div class="brand-title">LS Midnight : Roleplay</div>
+            <div class="brand-sub">Candidature Waitlist</div>
+          </div>
+        </a>
 
-  const key = "LSM_CANDIDATURES";
-  const form = document.getElementById("form");
-  const msg = document.getElementById("msg");
-  const list = document.getElementById("list");
-  const see = document.getElementById("see");
+        <nav class="links">
+          <a class="link" href="index.html">Accueil</a>
+          <a class="link" href="reglement-rp.html">Règlement RP</a>
+          <a class="link" href="reglement-discord.html">Règlement Discord</a>
+          <a class="link" href="metiers.html">Métiers</a>
+          <a class="link" href="boutique.html">Boutique</a>
+        </nav>
 
-  function getAll(){
-    try { return JSON.parse(localStorage.getItem(key) || "[]"); }
-    catch { return []; }
-  }
-
-  function saveAll(arr){
-    localStorage.setItem(key, JSON.stringify(arr));
-  }
-
-  function escapeHtml(str){
-    return String(str)
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;")
-      .replaceAll("'","&#039;");
-  }
-
-  function render(){
-    const items = getAll().slice().reverse();
-    if (!items.length){
-      list.innerHTML = "";
-      return;
-    }
-    list.innerHTML = items.map(c => `
-      <div class="card">
-        <div class="card-title">${escapeHtml(c.nomrp)} <span class="badge" style="margin-left:8px;">${c.status}</span></div>
-        <div class="small">Discord: ${escapeHtml(c.discord)} • Âge: ${escapeHtml(c.age)} • XP: ${escapeHtml(c.xp)}</div>
-        <hr class="hr"/>
-        <div class="small"><b>Motivation:</b> ${escapeHtml(c.motivation).slice(0,240)}...</div>
-        <div class="small" style="margin-top:6px;"><b>Background:</b> ${escapeHtml(c.background).slice(0,240)}...</div>
-        <div class="small" style="margin-top:10px;opacity:.75;">Envoyée le: ${new Date(c.createdAt).toLocaleString()}</div>
+        <a class="btn btn-red" target="_blank" rel="noreferrer" href="https://discord.gg/ctzPkVGn5K">Discord</a>
       </div>
-    `).join("");
-  }
+    </div>
+  </header>
 
-  async function sendToDiscord(c){
-    // message simple + embed
-    const payload = {
-      username: "LS Midnight • Waitlist",
-      embeds: [
-        {
-          title: "📝 Nouvelle Candidature RP (Waitlist)",
+  <main class="main">
+    <div class="container">
+      <h1>📝 Candidature RP (Waitlist)</h1>
+      <p class="small">V1 : candidature enregistrée sur ton PC (local). V2 : envoi Discord / base de données.</p>
+
+      <div class="card" style="margin-top:16px;">
+        <form id="form">
+          <div class="row">
+            <div>
+              <label class="small">Pseudo Discord</label>
+              <input class="input" name="discord" placeholder="ex: MonPseudo" required />
+            </div>
+            <div>
+              <label class="small">Âge</label>
+              <input class="input" name="age" type="number" min="13" max="99" required />
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:12px;">
+            <div>
+              <label class="small">Nom RP</label>
+              <input class="input" name="nomrp" placeholder="Prénom Nom" required />
+            </div>
+            <div>
+              <label class="small">Expérience RP</label>
+              <select class="select" name="xp" required>
+                <option value="">Choisir...</option>
+                <option>Débutant</option>
+                <option>Intermédiaire</option>
+                <option>Confirmé</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="margin-top:12px;">
+            <label class="small">Motivation</label>
+            <textarea class="textarea" name="motivation" required></textarea>
+          </div>
+
+          <div style="margin-top:12px;">
+            <label class="small">Background RP (résumé)</label>
+            <textarea class="textarea" name="background" required></textarea>
+          </div>
+
+          <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="btn btn-red" type="submit">Envoyer</button>
+            <button class="btn" type="button" id="see">Voir mes candidatures</button>
+          </div>
+
+          <div id="msg" class="small" style="margin-top:10px;"></div>
+        </form>
+      </div>
+
+      <div id="list" class="grid" style="margin-top:14px;"></div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container" style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+      <div>© <span data-year></span> LS Midnight : Roleplay</div>
+      <div><a href="https://discord.gg/ctzPkVGn5K" target="_blank" rel="noreferrer">Discord</a></div>
+    </div>
+  </footer>
+
+  <script>
+    const key = "LSM_CANDIDATURES";
+    const WEBHOOK_URL = "https://discord.com/api/webhooks/1477320308351439001/mvklhBTHHPBnHnZZOEBmnFir6kFLJncOwI6OdZ8muVysyZdNs6XQtVF90mvPJmFWSRs6";
+
+    const form = document.getElementById("form");
+    const msg = document.getElementById("msg");
+    const list = document.getElementById("list");
+    const see = document.getElementById("see");
+
+    function getAll(){
+      try { return JSON.parse(localStorage.getItem(key) || "[]"); }
+      catch { return []; }
+    }
+
+    function saveAll(arr){
+      localStorage.setItem(key, JSON.stringify(arr));
+    }
+
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function render(){
+      const items = getAll().slice().reverse();
+      if (!items.length){ list.innerHTML=""; return; }
+
+      list.innerHTML = items.map(c => `
+        <div class="card">
+          <div class="card-title">${escapeHtml(c.nomrp)} <span class="badge" style="margin-left:8px;">${c.status}</span></div>
+          <div class="small">Discord: ${escapeHtml(c.discord)} • Âge: ${escapeHtml(c.age)} • XP: ${escapeHtml(c.xp)}</div>
+          <hr class="hr"/>
+          <div class="small"><b>Motivation:</b> ${escapeHtml(c.motivation).slice(0,240)}...</div>
+          <div class="small" style="margin-top:6px;"><b>Background:</b> ${escapeHtml(c.background).slice(0,240)}...</div>
+          <div class="small" style="margin-top:10px;opacity:.75;">Envoyée le: ${new Date(c.createdAt).toLocaleString()}</div>
+        </div>
+      `).join("");
+    }
+
+    async function sendToDiscord(c){
+      const payload = {
+        username: "LS Midnight • Waitlist",
+        embeds: [{
+          title: "📝 Nouvelle Candidature RP",
           color: 14423100,
           fields: [
-            { name: "👤 Pseudo Discord", value: c.discord || "—", inline: true },
-            { name: "🎂 Âge", value: String(c.age || "—"), inline: true },
-            { name: "🧾 Nom RP", value: c.nomrp || "—", inline: false },
-            { name: "📈 Expérience RP", value: c.xp || "—", inline: true },
-            { name: "🔥 Motivation", value: (c.motivation || "—").slice(0, 1024), inline: false },
-            { name: "📚 Background", value: (c.background || "—").slice(0, 1024), inline: false },
+            { name: "Pseudo Discord", value: c.discord, inline: true },
+            { name: "Âge", value: c.age, inline: true },
+            { name: "Nom RP", value: c.nomrp },
+            { name: "Expérience RP", value: c.xp },
+            { name: "Motivation", value: c.motivation.slice(0,1024) },
+            { name: "Background RP", value: c.background.slice(0,1024) }
           ],
-          footer: { text: "LS Midnight : Roleplay" },
           timestamp: new Date().toISOString()
-        }
-      ]
-    };
+        }]
+      };
 
-    const res = await fetch(WEBHOOK_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
+      await fetch(WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const fd = new FormData(form);
+      const c = {
+        discord: fd.get("discord"),
+        age: fd.get("age"),
+        nomrp: fd.get("nomrp"),
+        xp: fd.get("xp"),
+        motivation: fd.get("motivation"),
+        background: fd.get("background"),
+        status: "Reçue",
+        createdAt: Date.now()
+      };
+
+      const all = getAll();
+      all.push(c);
+      saveAll(all);
+
+      await sendToDiscord(c);
+
+      msg.textContent = "✅ Candidature envoyée sur Discord et enregistrée.";
+      form.reset();
+      render();
     });
 
-    // Discord OK = 204
-    if (!res.ok) {
-      const t = await res.text().catch(() => "");
-      throw new Error("Webhook error " + res.status + " " + t);
-    }
-  }
-
-  // Bouton "Voir mes candidatures" (comme avant)
-  if (see) see.addEventListener("click", render);
-
-  // Envoi du formulaire
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const fd = new FormData(form);
-    const c = {
-      discord: String(fd.get("discord") || ""),
-      age: String(fd.get("age") || ""),
-      nomrp: String(fd.get("nomrp") || ""),
-      xp: String(fd.get("xp") || ""),
-      motivation: String(fd.get("motivation") || ""),
-      background: String(fd.get("background") || ""),
-      status: "Reçue",
-      createdAt: Date.now()
-    };
-
-    // 1) Sauvegarde locale (comme avant)
-    const all = getAll();
-    all.push(c);
-    saveAll(all);
-
-    // 2) Envoi Discord
-    msg.textContent = "⏳ Envoi en cours...";
-    try {
-      await sendToDiscord(c);
-      msg.textContent = "✅ Candidature envoyée sur Discord !";
-    } catch (err) {
-      console.error(err);
-      msg.textContent = "⚠️ Candidature enregistrée, mais l’envoi Discord a échoué.";
-    }
-
-    form.reset();
-    render();
-  });
-</script>
+    see.addEventListener("click", render);
+  </script>
+</body>
+</html>
