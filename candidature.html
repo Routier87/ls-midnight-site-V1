@@ -1,19 +1,21 @@
 <script>
-  // ⚠️ Met ton webhook ici (idéalement un nouveau, car celui-ci a été exposé)
   const WEBHOOK_URL = "https://discord.com/api/webhooks/1477320308351439001/mvklhBTHHPBnHnZZOEBmnFir6kFLJncOwI6OdZ8muVysyZdNs6XQtVF90mvPJmFWSRs6";
 
+  const key = "LSM_CANDIDATURES";
   const form = document.getElementById("form");
   const msg = document.getElementById("msg");
   const list = document.getElementById("list");
   const see = document.getElementById("see");
 
-  // Optionnel : garde aussi une copie locale pour que le joueur voie ce qu’il a envoyé
-  const key = "LSM_CANDIDATURES";
   function getAll(){
     try { return JSON.parse(localStorage.getItem(key) || "[]"); }
     catch { return []; }
   }
-  function saveAll(arr){ localStorage.setItem(key, JSON.stringify(arr)); }
+
+  function saveAll(arr){
+    localStorage.setItem(key, JSON.stringify(arr));
+  }
+
   function escapeHtml(str){
     return String(str)
       .replaceAll("&","&amp;")
@@ -22,12 +24,16 @@
       .replaceAll('"',"&quot;")
       .replaceAll("'","&#039;");
   }
+
   function render(){
     const items = getAll().slice().reverse();
-    if (!items.length){ list.innerHTML=""; return; }
+    if (!items.length){
+      list.innerHTML = "";
+      return;
+    }
     list.innerHTML = items.map(c => `
       <div class="card">
-        <div class="card-title">${escapeHtml(c.nomrp)} <span class="badge" style="margin-left:8px;">Envoyée</span></div>
+        <div class="card-title">${escapeHtml(c.nomrp)} <span class="badge" style="margin-left:8px;">${c.status}</span></div>
         <div class="small">Discord: ${escapeHtml(c.discord)} • Âge: ${escapeHtml(c.age)} • XP: ${escapeHtml(c.xp)}</div>
         <hr class="hr"/>
         <div class="small"><b>Motivation:</b> ${escapeHtml(c.motivation).slice(0,240)}...</div>
@@ -36,71 +42,77 @@
       </div>
     `).join("");
   }
-  if (see) see.addEventListener("click", render);
 
-  async function sendToDiscord(payload){
-    const res = await fetch(WEBHOOK_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-
-    // Discord répond 204 No Content si ok
-    if (!res.ok) {
-      const txt = await res.text().catch(() => "");
-      throw new Error(`Erreur webhook (${res.status}) ${txt}`);
-    }
-  }
-
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    msg.textContent = "⏳ Envoi en cours...";
-
-    const fd = new FormData(form);
-
-    const discord = String(fd.get("discord") || "");
-    const age = String(fd.get("age") || "");
-    const nomrp = String(fd.get("nomrp") || "");
-    const xp = String(fd.get("xp") || "");
-    const motivation = String(fd.get("motivation") || "");
-    const background = String(fd.get("background") || "");
-
-    // ✅ Message Discord joli (embed)
+  async function sendToDiscord(c){
+    // message simple + embed
     const payload = {
       username: "LS Midnight • Waitlist",
-      // avatar_url: "https://exemple.com/ton-logo.png", // optionnel
       embeds: [
         {
           title: "📝 Nouvelle Candidature RP (Waitlist)",
-          color: 14423100, // rouge (en decimal)
+          color: 14423100,
           fields: [
-            { name: "👤 Pseudo Discord", value: discord || "—", inline: true },
-            { name: "🎂 Âge", value: age || "—", inline: true },
-            { name: "🧾 Nom RP", value: nomrp || "—", inline: false },
-            { name: "📈 Expérience RP", value: xp || "—", inline: true },
-            { name: "🔥 Motivation", value: (motivation || "—").slice(0, 1024), inline: false },
-            { name: "📚 Background", value: (background || "—").slice(0, 1024), inline: false },
+            { name: "👤 Pseudo Discord", value: c.discord || "—", inline: true },
+            { name: "🎂 Âge", value: String(c.age || "—"), inline: true },
+            { name: "🧾 Nom RP", value: c.nomrp || "—", inline: false },
+            { name: "📈 Expérience RP", value: c.xp || "—", inline: true },
+            { name: "🔥 Motivation", value: (c.motivation || "—").slice(0, 1024), inline: false },
+            { name: "📚 Background", value: (c.background || "—").slice(0, 1024), inline: false },
           ],
-          footer: { text: "LS Midnight : Roleplay • Waitlist" },
-          timestamp: new Date().toISOString(),
+          footer: { text: "LS Midnight : Roleplay" },
+          timestamp: new Date().toISOString()
         }
-      ],
+      ]
     };
 
+    const res = await fetch(WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    // Discord OK = 204
+    if (!res.ok) {
+      const t = await res.text().catch(() => "");
+      throw new Error("Webhook error " + res.status + " " + t);
+    }
+  }
+
+  // Bouton "Voir mes candidatures" (comme avant)
+  if (see) see.addEventListener("click", render);
+
+  // Envoi du formulaire
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const fd = new FormData(form);
+    const c = {
+      discord: String(fd.get("discord") || ""),
+      age: String(fd.get("age") || ""),
+      nomrp: String(fd.get("nomrp") || ""),
+      xp: String(fd.get("xp") || ""),
+      motivation: String(fd.get("motivation") || ""),
+      background: String(fd.get("background") || ""),
+      status: "Reçue",
+      createdAt: Date.now()
+    };
+
+    // 1) Sauvegarde locale (comme avant)
+    const all = getAll();
+    all.push(c);
+    saveAll(all);
+
+    // 2) Envoi Discord
+    msg.textContent = "⏳ Envoi en cours...";
     try {
-      await sendToDiscord(payload);
-
-      // Optionnel : sauvegarde locale
-      const all = getAll();
-      all.push({ discord, age, nomrp, xp, motivation, background, createdAt: Date.now() });
-      saveAll(all);
-
+      await sendToDiscord(c);
       msg.textContent = "✅ Candidature envoyée sur Discord !";
-      form.reset();
-      render();
     } catch (err) {
       console.error(err);
-      msg.textContent = "❌ Erreur : impossible d’envoyer la candidature (webhook).";
+      msg.textContent = "⚠️ Candidature enregistrée, mais l’envoi Discord a échoué.";
     }
+
+    form.reset();
+    render();
   });
 </script>
