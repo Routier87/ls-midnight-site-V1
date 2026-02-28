@@ -1,7 +1,7 @@
 window.LS_MUSIQUES = [
   {
-    title: "LS Midnight - Playlist (YouTube) [Exemple]",
+    title: "LS Midnight - Playlist (exemple YouTube)",
     embedUrl: "https://www.youtube.com/embed/videoseries?list=PLxxxxxx"
   }
-  // Ajoute tes playlists ici (YouTube/SoundCloud/Spotify embed)
+  // Ajoute tes playlists ici
 ];
