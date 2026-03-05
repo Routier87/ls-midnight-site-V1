@@ -1,58 +1,72 @@
 <!doctype html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-
-<title>Métiers</title>
-
-<link rel="stylesheet" href="assets/style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Concessionnaires - LS Midnight</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <script defer src="assets/app.js"></script>
 </head>
-
 <body>
 
+<header class="nav">
+  <div class="container">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <img src="images/logo.png" class="logo-img" alt="Logo">
+        <div>
+          <div class="brand-title">LS Midnight</div>
+          <div class="brand-sub">Concessionnaires</div>
+        </div>
+      </a>
+
+      <nav class="links">
+        <a class="link" href="index.html">Accueil</a>
+        <a class="link" href="reglement-rp.html">Règlement RP</a>
+        <a class="link" href="reglement-discord.html">Règlement Discord</a>
+        <a class="link" href="candidature.html">Waitlist</a>
+        <a class="link" href="candidature-staff.html">Staff</a>
+        <a class="link" href="boutique.html">Boutique</a>
+        <a class="link" href="musiques.html">Musiques</a>
+      </nav>
+
+      <a class="btn btn-primary" href="https://discord.gg/ctzPkVGn5K" target="_blank" rel="noreferrer">Discord</a>
+    </div>
+  </div>
+</header>
+
 <main class="main">
-<div class="container">
+  <div class="container">
+    <h1 class="jobs-title">🚗 Concessionnaires</h1>
+    <p class="small">Choisis un catalogue :</p>
 
-<h1 class="jobs-title">💼 Métiers</h1>
+    <div class="grid grid-3" style="margin-top:16px;">
+      <a class="card reveal" href="concessionnaire-voiture.html">
+        <div class="card-title">🚗 Concessionnaires Voiture</div>
+        <p>Voir le catalogue voitures.</p>
+      </a>
 
-<div class="jobs-stack">
+      <a class="card reveal" href="concessionnaire-moto.html">
+        <div class="card-title">🏍 Concessionnaires Moto</div>
+        <p>Voir le catalogue motos.</p>
+      </a>
 
-<div class="panel">
-<h2>👮 Public</h2>
+      <a class="card reveal" href="concessionnaire-bateau.html">
+        <div class="card-title">🚤 Concessionnaires Bateau</div>
+        <p>Voir le catalogue bateaux.</p>
+      </a>
 
-<div class="jobs-list">
-<div class="job-item">LSPD</div>
-</div>
-
-</div>
-
-<div class="panel">
-<h2>🏢 Entreprises</h2>
-
-<div class="jobs-list">
-<div class="job-item">LS Custom</div>
-<div class="job-item">Casino</div>
-</div>
-
-</div>
-
-<div class="panel">
-<h2>🚗 Concessionnaires</h2>
-
-<div class="jobs-list">
-<div class="job-item">Voiture</div>
-<div class="job-item">Moto</div>
-<div class="job-item">Avion</div>
-<div class="job-item">Bateau</div>
-</div>
-
-</div>
-
-</div>
-
-</div>
+      <a class="card reveal" href="concessionnaire-aeroport.html">
+        <div class="card-title">✈ Concessionnaires Aéroport</div>
+        <p>Voir le catalogue avions/hélicos.</p>
+      </a>
+    </div>
+  </div>
 </main>
+
+<footer class="footer">
+  <div class="container">© <span data-year></span> LS Midnight : Roleplay</div>
+</footer>
 
 </body>
 </html>
