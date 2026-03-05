@@ -1,35 +1,111 @@
 <!doctype html>
 <html lang="fr">
 <head>
-
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-
-<title>Concessionnaire Moto</title>
-
-<link rel="stylesheet" href="assets/style.css">
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Concessionnaire Moto - LS Midnight</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <script defer src="assets/app.js"></script>
+  <script defer src="assets/catalogue.js"></script>
 </head>
-
 <body>
 
+<header class="nav">
+  <div class="container">
+    <div class="nav-inner">
+      <a class="brand" href="metiers.html">
+        <img src="images/logo.png" class="logo-img" alt="Logo">
+        <div>
+          <div class="brand-title">LS Midnight</div>
+          <div class="brand-sub">Concessionnaire Moto</div>
+        </div>
+      </a>
+
+      <nav class="links">
+        <a class="link" href="index.html">Accueil</a>
+        <a class="link" href="metiers.html">Concessionnaires</a>
+      </nav>
+
+      <a class="btn btn-primary" href="https://discord.gg/ctzPkVGn5K" target="_blank" rel="noreferrer">Discord</a>
+    </div>
+  </div>
+</header>
+
 <main class="main">
+  <div class="container">
+    <h1>🏍 Concessionnaires Moto</h1>
+    <p class="small">Catalogue V1 — filtres + recherche.</p>
 
-<div class="container">
+    <div class="card" style="margin-top:14px;">
+      <div class="row">
+        <div>
+          <label class="small">Recherche</label>
+          <input class="input" id="q" placeholder="Ex: Bati, Sanchez..." />
+        </div>
+        <div>
+          <label class="small">Filtrer par type</label>
+          <select class="select" id="tag">
+            <option value="">Tous</option>
+            <option>Sport</option>
+            <option>Offroad</option>
+            <option>Custom</option>
+          </select>
+        </div>
+      </div>
+    </div>
 
-<h1>🏍 Concessionnaires Moto</h1>
-
-<div class="card">
-
-<p>
-Le concessionnaire moto vend des motos sportives, routières et custom.
-</p>
-
-</div>
-
-</div>
-
+    <div id="grid" class="grid grid-3" style="margin-top:14px;"></div>
+  </div>
 </main>
+
+<footer class="footer">
+  <div class="container">© <span data-year></span> LS Midnight : Roleplay</div>
+</footer>
+
+<script>
+  const TYPE = "moto";
+  const data = (window.LS_CATALOGUE && window.LS_CATALOGUE[TYPE]) ? window.LS_CATALOGUE[TYPE] : [];
+  const grid = document.getElementById("grid");
+  const q = document.getElementById("q");
+  const tag = document.getElementById("tag");
+
+  function escapeHtml(s){
+    return String(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;");
+  }
+
+  function render(){
+    const query = (q.value || "").toLowerCase().trim();
+    const t = (tag.value || "").toLowerCase().trim();
+
+    const items = data.filter(v => {
+      const okQ = !query || (v.name + " " + v.brand).toLowerCase().includes(query);
+      const okT = !t || (v.tag || "").toLowerCase() === t;
+      return okQ && okT;
+    });
+
+    if(!items.length){
+      grid.innerHTML = `<div class="card"><div class="card-title">Aucun résultat</div><p>Change ta recherche ou ton filtre.</p></div>`;
+      return;
+    }
+
+    grid.innerHTML = items.map(v => `
+      <div class="card reveal">
+        <div class="card-title">${escapeHtml(v.name)} <span class="badge" style="margin-left:8px;">${escapeHtml(v.tag)}</span></div>
+        <p class="small">${escapeHtml(v.brand)} • <b>${escapeHtml(v.price)}</b></p>
+        <div style="margin-top:10px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+          <span class="badge">${escapeHtml(v.stock)}</span>
+          <a class="btn" href="https://discord.gg/ctzPkVGn5K" target="_blank" rel="noreferrer">Contacter</a>
+        </div>
+      </div>
+    `).join("");
+
+    document.querySelectorAll(".reveal").forEach(el => el.classList.add("show"));
+  }
+
+  q.addEventListener("input", render);
+  tag.addEventListener("change", render);
+  render();
+</script>
 
 </body>
 </html>
