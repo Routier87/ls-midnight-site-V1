@@ -1,0 +1,4 @@
+[
+  {"name":"Dinghy","brand":"Nagasaki","price":55000,"tag":"Mer","stock":"Disponible"},
+  {"name":"Speeder","brand":"Pegassi","price":120000,"tag":"Rapide","stock":"Sur commande"}
+]
