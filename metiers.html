@@ -1,96 +1,58 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Métiers - LS Midnight</title>
-  <link rel="stylesheet" href="assets/style.css" />
-  <script defer src="assets/data-metiers.js"></script>
-  <script defer src="assets/app.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Métiers</title>
+
+<link rel="stylesheet" href="assets/style.css">
 </head>
 
-<body class="jobs-hero">
-  <header class="nav">
-    <div class="container">
-      <div class="nav-inner">
-        <a class="brand" href="index.html">
-          <img src="images/logo.png" alt="Logo LS Midnight" class="logo-img">
-          <div>
-            <div class="brand-title">LS Midnight : Roleplay</div>
-            <div class="brand-sub">Métiers</div>
-          </div>
-        </a>
+<body>
 
-        <nav class="links">
-          <a class="link" href="index.html">Accueil</a>
-          <a class="link" href="reglement-rp.html">Règlement RP</a>
-          <a class="link" href="reglement-discord.html">Règlement Discord</a>
-          <a class="link" href="musiques.html">Musiques</a>
-          <a class="link" href="candidature.html">Candidature</a>
-          <a class="link" href="boutique.html">Boutique</a>
-        </nav>
+<main class="main">
+<div class="container">
 
-        <a class="btn btn-red" target="_blank" rel="noreferrer" href="https://discord.gg/ctzPkVGn5K">Discord</a>
-      </div>
-    </div>
-  </header>
+<h1 class="jobs-title">💼 Métiers</h1>
 
-  <main class="jobs-wrap">
-    <div class="container">
+<div class="jobs-stack">
 
-      <div class="jobs-title">
-        <span class="emoji">💼</span>
-        <div>Liste des Métiers —<br/>LS Midnight : Roleplay</div>
-      </div>
+<div class="panel">
+<h2>👮 Public</h2>
 
-      <div class="jobs-stack">
+<div class="jobs-list">
+<div class="job-item">LSPD</div>
+</div>
 
-        <section class="panel">
-          <h2><span class="icon">📄</span> Métier Mémoire</h2>
-          <div class="legend">
-            <div class="legend-row">
-              <span style="width:10px;text-align:center;margin-top:1px;">⚠️</span>
-              <div><b>En cours de développement</b> — Les métiers sont en préparation.</div>
-            </div>
-          </div>
-        </section>
+</div>
 
-        <div id="jobs-container"></div>
+<div class="panel">
+<h2>🏢 Entreprises</h2>
 
-      </div>
-    </div>
-  </main>
+<div class="jobs-list">
+<div class="job-item">LS Custom</div>
+<div class="job-item">Casino</div>
+</div>
 
-  <footer class="footer">
-    <div class="container" style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;">
-      <div>© <span data-year></span> LS Midnight : Roleplay</div>
-      <div><a href="https://discord.gg/ctzPkVGn5K" target="_blank" rel="noreferrer">Discord</a></div>
-    </div>
-  </footer>
+</div>
 
-  <script>
-    const root = document.getElementById("jobs-container");
-    const categories = window.LS_METIERS || [];
+<div class="panel">
+<h2>🚗 Concessionnaires</h2>
 
-    root.innerHTML = categories.map(cat => `
-      <section class="panel">
-        <h2>
-          <span class="icon">${cat.icon || "📌"}</span>
-          ${cat.category}
-          <span class="badge" style="margin-left:10px;">${(cat.jobs||[]).length} métiers</span>
-        </h2>
+<div class="jobs-list">
+<div class="job-item">Voiture</div>
+<div class="job-item">Moto</div>
+<div class="job-item">Avion</div>
+<div class="job-item">Bateau</div>
+</div>
 
-        <div class="jobs-list">
-          ${(cat.jobs || []).map(j => `
-            <div class="job-item">
-              <div class="bullet">${j.emoji || "•"}</div>
-              <div class="name">${j.name}</div>
-              <div class="status">⚠️ En cours</div>
-            </div>
-          `).join("")}
-        </div>
-      </section>
-    `).join("");
-  </script>
+</div>
+
+</div>
+
+</div>
+</main>
+
 </body>
 </html>
