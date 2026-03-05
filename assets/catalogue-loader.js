@@ -16,6 +16,12 @@ function formatPrice(n){
   return v.toLocaleString("fr-FR") + " $";
 }
 
+function fillTags(tagEl, data){
+  if (!tagEl) return;
+  const tags = Array.from(new Set(data.map(v => (v.tag || "").trim()).filter(Boolean))).sort();
+  tagEl.innerHTML = `<option value="">Tous</option>` + tags.map(t => `<option>${escapeHtml(t)}</option>`).join("");
+}
+
 function renderCatalogue({data, grid, qEl, tagEl, discordInvite}){
   const query = (qEl?.value || "").toLowerCase().trim();
   const t = (tagEl?.value || "").toLowerCase().trim();
