@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Concessionnaire Aéroport</title>
+  <title>Concessionnaire Aéroport - LS Midnight</title>
   <link rel="stylesheet" href="assets/style.css">
   <script defer src="assets/app.js"></script>
   <script defer src="assets/catalogue-loader.js"></script>
@@ -34,7 +34,7 @@
 <main class="main">
   <div class="container">
     <h1>✈ Catalogue Aéroport</h1>
-    <p class="small">Recherche + filtre + prix (JSON).</p>
+    <p class="small">Catalogue complet + prix GTA Online • recherche & filtre.</p>
 
     <div class="card" style="margin-top:14px;">
       <div class="row">
@@ -43,12 +43,9 @@
           <input class="input" id="q" placeholder="Ex: Frogger, Luxor..." />
         </div>
         <div>
-          <label class="small">Filtrer par type</label>
+          <label class="small">Filtrer (catégorie GTA)</label>
           <select class="select" id="tag">
-            <option value="">Tous</option>
-            <option>Avion</option>
-            <option>Hélico</option>
-            <option>Jet</option>
+            <option value="">Chargement...</option>
           </select>
         </div>
       </div>
@@ -71,6 +68,8 @@
 
   try{
     const data = await loadCatalogue("data/aeroport.json");
+    fillTags(tagEl, data);
+
     const run = ()=>renderCatalogue({data, grid, qEl, tagEl, discordInvite});
     qEl.addEventListener("input", run);
     tagEl.addEventListener("change", run);
