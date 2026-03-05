@@ -1,92 +1,128 @@
 <!doctype html>
 <html lang="fr">
 <head>
-
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-
-<title>Métiers</title>
-
-<link rel="stylesheet" href="assets/style.css">
-<script defer src="assets/app.js"></script>
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>LS Midnight : Roleplay</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <script defer src="assets/app.js"></script>
 </head>
 <body>
 
 <header class="nav">
-<div class="container">
-<div class="nav-inner">
+  <div class="container">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <img src="images/logo.png" class="logo-img" alt="Logo">
+        <div>
+          <div class="brand-title">LS Midnight : Roleplay</div>
+          <div class="brand-sub">Serveur GTA RP</div>
+        </div>
+      </a>
 
-<a class="brand" href="index.html">
-<img src="images/logo.png" class="logo-img">
-<div>
-<div class="brand-title">LS Midnight</div>
-<div class="brand-sub">Métiers</div>
-</div>
-</a>
+      <nav class="links">
+        <a class="link" href="index.html">Accueil</a>
+        <a class="link" href="reglement-rp.html">Règlement RP</a>
+        <a class="link" href="reglement-discord.html">Règlement Discord</a>
+        <a class="link" href="metiers.html">Concessionnaires</a>
+        <a class="link" href="candidature.html">Waitlist</a>
+        <a class="link" href="candidature-staff.html">Staff</a>
+        <a class="link" href="boutique.html">Boutique</a>
+        <a class="link" href="musiques.html">Musiques</a>
+      </nav>
 
-<nav class="links">
-<a class="link" href="index.html">Accueil</a>
-<a class="link" href="candidature.html">Waitlist</a>
-</nav>
-
-</div>
-</div>
+      <a class="btn btn-primary" href="https://discord.gg/ctzPkVGn5K" target="_blank" rel="noreferrer">Discord</a>
+    </div>
+  </div>
 </header>
 
 <main class="main">
+  <div class="container">
 
-<div class="container">
+    <section class="hero reveal">
+      <div class="hero-card">
+        <h1 class="hero-title">Bienvenue sur LS Midnight</h1>
+        <p class="hero-sub">
+          Serveur GTA RP immersif • Métiers actifs • Événements • Communauté sérieuse.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="candidature.html">Faire la Waitlist</a>
+          <a class="btn" href="metiers.html">Voir les concessionnaires</a>
+        </div>
+      </div>
+    </section>
 
-<h1 class="jobs-title">🚗 Concessionnaires</h1>
+    <section class="grid grid-3" style="margin-top:22px;">
+      <div class="card reveal">
+        <div class="card-title">📜 Règlements</div>
+        <p>Lis les règles RP/Discord avant de jouer.</p>
+        <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
+          <a class="btn" href="reglement-rp.html">Règlement RP</a>
+          <a class="btn" href="reglement-discord.html">Règlement Discord</a>
+        </div>
+      </div>
 
-<div class="grid grid-3" style="margin-top:20px">
+      <div class="card reveal">
+        <div class="card-title">📝 Candidatures</div>
+        <p>Waitlist RP + Candidature Staff.</p>
+        <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
+          <a class="btn btn-primary" href="candidature.html">Waitlist</a>
+          <a class="btn" href="candidature-staff.html">Staff</a>
+        </div>
+      </div>
 
-<a class="card reveal" href="concessionnaire-voiture.html">
+      <div class="card reveal">
+        <div class="card-title">🎵 Musiques</div>
+        <p>Les playlists et musiques du serveur.</p>
+        <div style="margin-top:12px;">
+          <a class="btn" href="musiques.html">Ouvrir</a>
+        </div>
+      </div>
+    </section>
 
-<div class="card-title">🚗 Concessionnaires Voiture</div>
+    <section style="margin-top:26px;">
+      <h2>🚗 Concessionnaires</h2>
+      <p class="small">Accède aux catalogues par type.</p>
 
-<p>
-Vente de voitures et gestion du concessionnaire automobile.
-</p>
+      <div class="grid grid-3" style="margin-top:12px;">
+        <a class="card reveal" href="concessionnaire-voiture.html">
+          <div class="card-title">🚗 Voiture</div>
+          <p>Catalogue auto + filtres (V1).</p>
+        </a>
 
-</a>
+        <a class="card reveal" href="concessionnaire-moto.html">
+          <div class="card-title">🏍 Moto</div>
+          <p>Catalogue moto + filtres (V1).</p>
+        </a>
 
-<a class="card reveal" href="concessionnaire-moto.html">
+        <a class="card reveal" href="concessionnaire-bateau.html">
+          <div class="card-title">🚤 Bateau</div>
+          <p>Catalogue maritime + filtres (V1).</p>
+        </a>
 
-<div class="card-title">🏍 Concessionnaires Moto</div>
+        <a class="card reveal" href="concessionnaire-aeroport.html">
+          <div class="card-title">✈ Aéroport</div>
+          <p>Catalogue aérien + filtres (V1).</p>
+        </a>
+      </div>
+    </section>
 
-<p>
-Vente de motos et personnalisation des véhicules deux roues.
-</p>
+    <section style="margin-top:28px;">
+      <div class="card reveal">
+        <div class="card-title">🚀 Rejoins la communauté</div>
+        <p>Tout se passe sur Discord : annonces, aide, events, support.</p>
+        <div style="margin-top:12px;">
+          <a class="btn btn-primary" href="https://discord.gg/ctzPkVGn5K" target="_blank" rel="noreferrer">Rejoindre Discord</a>
+        </div>
+      </div>
+    </section>
 
-</a>
-
-<a class="card reveal" href="concessionnaire-bateau.html">
-
-<div class="card-title">🚤 Concessionnaires Bateau</div>
-
-<p>
-Vente de bateaux pour les activités maritimes.
-</p>
-
-</a>
-
-<a class="card reveal" href="concessionnaire-aeroport.html">
-
-<div class="card-title">✈ Concessionnaires Aéroport</div>
-
-<p>
-Vente d'avions et hélicoptères.
-</p>
-
-</a>
-
-</div>
-
-</div>
-
+  </div>
 </main>
+
+<footer class="footer">
+  <div class="container">© <span data-year></span> LS Midnight : Roleplay</div>
+</footer>
 
 </body>
 </html>
