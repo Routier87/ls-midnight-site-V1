@@ -1,0 +1,6 @@
+[
+  {"name":"Sultan RS","brand":"Karin","price":85000,"tag":"Sport","stock":"Disponible"},
+  {"name":"Buffalo STX","brand":"Bravado","price":120000,"tag":"Muscle","stock":"Disponible"},
+  {"name":"Schafter V12","brand":"Benefactor","price":150000,"tag":"Luxury","stock":"Sur commande"},
+  {"name":"Banshee 900R","brand":"Bravado","price":220000,"tag":"Super","stock":"Disponible"}
+]
