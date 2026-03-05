@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Concessionnaire Voiture - LS Midnight</title>
+  <title>Concessionnaire Voiture</title>
   <link rel="stylesheet" href="assets/style.css">
   <script defer src="assets/app.js"></script>
-  <script defer src="assets/catalogue.js"></script>
+  <script defer src="assets/catalogue-loader.js"></script>
 </head>
 <body>
 
@@ -33,8 +33,8 @@
 
 <main class="main">
   <div class="container">
-    <h1>🚗 Concessionnaires Voiture</h1>
-    <p class="small">Catalogue V1 — filtres + recherche.</p>
+    <h1>🚗 Catalogue Voitures</h1>
+    <p class="small">Recherche + filtre + prix (JSON).</p>
 
     <div class="card" style="margin-top:14px;">
       <div class="row">
@@ -64,49 +64,22 @@
 </footer>
 
 <script>
-  const TYPE = "voiture";
-  const data = (window.LS_CATALOGUE && window.LS_CATALOGUE[TYPE]) ? window.LS_CATALOGUE[TYPE] : [];
+(async ()=>{
   const grid = document.getElementById("grid");
-  const q = document.getElementById("q");
-  const tag = document.getElementById("tag");
+  const qEl = document.getElementById("q");
+  const tagEl = document.getElementById("tag");
+  const discordInvite = "https://discord.gg/ctzPkVGn5K";
 
-  function escapeHtml(s){
-    return String(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;");
+  try{
+    const data = await loadCatalogue("data/voitures.json");
+    const run = ()=>renderCatalogue({data, grid, qEl, tagEl, discordInvite});
+    qEl.addEventListener("input", run);
+    tagEl.addEventListener("change", run);
+    run();
+  }catch(e){
+    grid.innerHTML = `<div class="card"><div class="card-title">Erreur catalogue</div><p class="small">${escapeHtml(e.message)}</p></div>`;
   }
-
-  function render(){
-    const query = (q.value || "").toLowerCase().trim();
-    const t = (tag.value || "").toLowerCase().trim();
-
-    const items = data.filter(v => {
-      const okQ = !query || (v.name + " " + v.brand).toLowerCase().includes(query);
-      const okT = !t || (v.tag || "").toLowerCase() === t;
-      return okQ && okT;
-    });
-
-    if(!items.length){
-      grid.innerHTML = `<div class="card"><div class="card-title">Aucun résultat</div><p>Change ta recherche ou ton filtre.</p></div>`;
-      return;
-    }
-
-    grid.innerHTML = items.map(v => `
-      <div class="card reveal">
-        <div class="card-title">${escapeHtml(v.name)} <span class="badge" style="margin-left:8px;">${escapeHtml(v.tag)}</span></div>
-        <p class="small">${escapeHtml(v.brand)} • <b>${escapeHtml(v.price)}</b></p>
-        <div style="margin-top:10px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
-          <span class="badge">${escapeHtml(v.stock)}</span>
-          <a class="btn" href="https://discord.gg/ctzPkVGn5K" target="_blank" rel="noreferrer">Contacter</a>
-        </div>
-      </div>
-    `).join("");
-
-    // si reveal est activé via app.js, on force le show direct pour ceux ajoutés après
-    document.querySelectorAll(".reveal").forEach(el => el.classList.add("show"));
-  }
-
-  q.addEventListener("input", render);
-  tag.addEventListener("change", render);
-  render();
+})();
 </script>
 
 </body>
