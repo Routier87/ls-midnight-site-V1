@@ -1,113 +1,26 @@
-<!doctype html>
-<html lang="fr">
-
-<head>
-
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-
-<title>Catalogue Bateaux</title>
-
-<link rel="stylesheet" href="assets/style.css">
-
-<script defer src="assets/catalogue-loader.js"></script>
-
-</head>
-
-<body>
-
-<main class="main">
-
-<div class="container">
-
-<h1>🚤 Catalogue Bateaux</h1>
-
-<div class="card">
-
-<div class="row">
-
-<div>
-<label>Recherche</label>
-<input class="input" id="q">
-</div>
-
-<div>
-<label>Catégorie</label>
-<select class="select" id="tag"></select>
-</div>
-
-</div>
-
-<div class="row">
-
-<div>
-<label>Marque</label>
-<select class="select" id="brand"></select>
-</div>
-
-<div>
-<label>Trier</label>
-<select class="select" id="sort">
-
-<option value="">Par défaut</option>
-<option value="price_asc">Prix croissant</option>
-<option value="price_desc">Prix décroissant</option>
-
-</select>
-
-</div>
-
-</div>
-
-<div class="small">
-<span id="count">0 résultat</span>
-</div>
-
-</div>
-
-<div id="grid" class="grid grid-3"></div>
-
-</div>
-
-</main>
-
 <script>
+(async ()=>{
+  const grid = document.getElementById("grid");
+  const qEl = document.getElementById("q");
+  const tagEl = document.getElementById("tag");
+  const brandEl = document.getElementById("brand");
+  const sortEl = document.getElementById("sort");
+  const countEl = document.getElementById("count");
+  const discordInvite = "https://discord.gg/ctzPkVGn5K";
 
-(async()=>{
+  try{
+    const data = await loadCatalogue("data/bateaux.json"); // ✅ ICI
+    fillTags(tagEl, data);
+    fillBrands(brandEl, data);
 
-const grid=document.getElementById("grid");
-const qEl=document.getElementById("q");
-const tagEl=document.getElementById("tag");
-const brandEl=document.getElementById("brand");
-const sortEl=document.getElementById("sort");
-const countEl=document.getElementById("count");
-
-const data=await loadCatalogue("data/bateaux.json");
-
-fillTags(tagEl,data);
-fillBrands(brandEl,data);
-
-const run=()=>renderCatalogue({
-data,
-grid,
-qEl,
-tagEl,
-brandEl,
-sortEl,
-countEl,
-discordInvite:"https://discord.gg/ctzPkVGn5K"
-});
-
-qEl.oninput=run;
-tagEl.onchange=run;
-brandEl.onchange=run;
-sortEl.onchange=run;
-
-run();
-
+    const run = () => renderCatalogue({data, grid, qEl, tagEl, brandEl, sortEl, countEl, discordInvite});
+    qEl.addEventListener("input", run);
+    tagEl.addEventListener("change", run);
+    brandEl.addEventListener("change", run);
+    sortEl.addEventListener("change", run);
+    run();
+  }catch(e){
+    grid.innerHTML = `<div class="card"><div class="card-title">Erreur catalogue</div><p class="small">${escapeHtml(e.message)}</p></div>`;
+  }
 })();
-
 </script>
-
-</body>
-</html>
