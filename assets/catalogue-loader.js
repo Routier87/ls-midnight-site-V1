@@ -1,11 +1,9 @@
-// ===== Charger un JSON catalogue =====
 async function loadCatalogue(DATA_URL){
   const res = await fetch(DATA_URL, { cache: "no-store" });
   if (!res.ok) throw new Error("Impossible de charger " + DATA_URL);
   return await res.json();
 }
 
-// ===== Sécurité HTML =====
 function escapeHtml(s){
   return String(s)
     .replaceAll("&","&amp;")
@@ -15,14 +13,12 @@ function escapeHtml(s){
     .replaceAll("'","&#039;");
 }
 
-// ===== Format prix =====
 function formatPrice(n){
   const v = Number(n);
   if (!Number.isFinite(v)) return "—";
   return v.toLocaleString("fr-FR") + " $";
 }
 
-// ===== Normaliser catégories GTA =====
 function normalizeTag(tag){
   const t = String(tag || "").trim().toLowerCase();
 
@@ -55,7 +51,6 @@ function normalizeTag(tag){
     .replace(/^./, c => c.toUpperCase());
 }
 
-// ===== Normaliser marque =====
 function normalizeBrand(brand){
   return (brand || "")
     .trim()
@@ -63,9 +58,9 @@ function normalizeBrand(brand){
     .replace(/^./, c => c.toUpperCase());
 }
 
-// ===== Remplir catégories =====
 function fillTags(tagEl, data){
   if (!tagEl) return;
+
   const tags = Array.from(new Set(
     data.map(v => normalizeTag(v.tag)).filter(Boolean)
   )).sort((a,b) => a.localeCompare(b, "fr"));
@@ -75,9 +70,9 @@ function fillTags(tagEl, data){
     tags.map(t => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join("");
 }
 
-// ===== Remplir marques =====
 function fillBrands(brandEl, data){
   if (!brandEl) return;
+
   const brands = Array.from(new Set(
     data.map(v => normalizeBrand(v.brand)).filter(Boolean)
   )).sort((a,b) => a.localeCompare(b, "fr"));
@@ -87,19 +82,29 @@ function fillBrands(brandEl, data){
     brands.map(b => `<option value="${escapeHtml(b)}">${escapeHtml(b)}</option>`).join("");
 }
 
-// ===== Tri =====
 function sortItems(items, mode){
   const m = (mode || "").toLowerCase();
-  if (m === "price_asc") return items.sort((a,b)=>(Number(a.price)||0)-(Number(b.price)||0));
-  if (m === "price_desc") return items.sort((a,b)=>(Number(b.price)||0)-(Number(a.price)||0));
-  if (m === "name_asc") return items.sort((a,b)=>String(a.name||"").localeCompare(String(b.name||""), "fr"));
-  if (m === "name_desc") return items.sort((a,b)=>String(b.name||"").localeCompare(String(a.name||""), "fr"));
+
+  if (m === "price_asc") {
+    return items.sort((a,b)=>(Number(a.price)||0)-(Number(b.price)||0));
+  }
+
+  if (m === "price_desc") {
+    return items.sort((a,b)=>(Number(b.price)||0)-(Number(a.price)||0));
+  }
+
+  if (m === "name_asc") {
+    return items.sort((a,b)=>String(a.name||"").localeCompare(String(b.name||""), "fr"));
+  }
+
+  if (m === "name_desc") {
+    return items.sort((a,b)=>String(b.name||"").localeCompare(String(a.name||""), "fr"));
+  }
+
   return items;
 }
 
-// ===== Rendu catalogue =====
 function renderCatalogue({data, grid, qEl, tagEl, brandEl, sortEl, countEl, discordInvite}){
-
   const query = (qEl?.value || "").toLowerCase().trim();
   const selectedTag = (tagEl?.value || "").toLowerCase().trim();
   const selectedBrand = (brandEl?.value || "").toLowerCase().trim();
@@ -128,16 +133,14 @@ function renderCatalogue({data, grid, qEl, tagEl, brandEl, sortEl, countEl, disc
       <div class="card">
         <div class="card-title">Aucun résultat</div>
         <p class="small">Change ta recherche ou tes filtres.</p>
-      </div>`;
+      </div>
+    `;
     return;
   }
 
   grid.innerHTML = items.map(v => {
     const tag = normalizeTag(v.tag);
     const brand = normalizeBrand(v.brand);
-
-    // ✅ Si ton JSON contient "image": URL -> affichage
-    // sinon placeholder local
     const img = v.image ? String(v.image) : "images/vehicle-placeholder.png";
 
     return `
