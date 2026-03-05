@@ -37,22 +37,32 @@
     <p class="small">Recherche + catégorie + marque + tri + images.</p>
 
     <div class="card" style="margin-top:14px;">
+
       <div class="row">
         <div>
           <label class="small">Recherche</label>
-          <input class="input" id="q" placeholder="Ex: Sultan, Pegassi..." />
+          <div style="display:flex; gap:10px; align-items:center;">
+            <input class="input" id="q" placeholder="Ex: Sultan, Pegassi..." />
+            <button class="btn btn-primary" type="button" id="searchBtn">Rechercher</button>
+          </div>
         </div>
+
         <div>
           <label class="small">Catégorie</label>
-          <select class="select" id="tag"><option value="">Chargement...</option></select>
+          <select class="select" id="tag">
+            <option value="">Chargement...</option>
+          </select>
         </div>
       </div>
 
       <div class="row" style="margin-top:12px;">
         <div>
           <label class="small">Marque</label>
-          <select class="select" id="brand"><option value="">Chargement...</option></select>
+          <select class="select" id="brand">
+            <option value="">Chargement...</option>
+          </select>
         </div>
+
         <div>
           <label class="small">Trier</label>
           <select class="select" id="sort">
@@ -68,6 +78,7 @@
       <div class="small" style="margin-top:10px;">
         📊 <span id="count">0 résultat</span>
       </div>
+
     </div>
 
     <div id="grid" class="grid grid-3" style="margin-top:14px;"></div>
@@ -86,22 +97,43 @@
   const brandEl = document.getElementById("brand");
   const sortEl = document.getElementById("sort");
   const countEl = document.getElementById("count");
-
+  const searchBtn = document.getElementById("searchBtn");
   const discordInvite = "https://discord.gg/ctzPkVGn5K";
 
   try{
     const data = await loadCatalogue("data/voitures.json");
+
     fillTags(tagEl, data);
     fillBrands(brandEl, data);
 
-    const run = () => renderCatalogue({data, grid, qEl, tagEl, brandEl, sortEl, countEl, discordInvite});
-    qEl.addEventListener("input", run);
+    const run = ()=>renderCatalogue({
+      data,
+      grid,
+      qEl,
+      tagEl,
+      brandEl,
+      sortEl,
+      countEl,
+      discordInvite
+    });
+
+    qEl.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") run();
+    });
+
+    searchBtn.addEventListener("click", run);
     tagEl.addEventListener("change", run);
     brandEl.addEventListener("change", run);
     sortEl.addEventListener("change", run);
+
     run();
   }catch(e){
-    grid.innerHTML = `<div class="card"><div class="card-title">Erreur catalogue</div><p class="small">${escapeHtml(e.message)}</p></div>`;
+    grid.innerHTML = `
+      <div class="card">
+        <div class="card-title">Erreur catalogue</div>
+        <p class="small">${escapeHtml(e.message)}</p>
+      </div>
+    `;
   }
 })();
 </script>
