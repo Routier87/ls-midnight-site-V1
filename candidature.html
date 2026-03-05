@@ -1,85 +1,115 @@
 <!doctype html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-
-<title>Candidature RP</title>
-
-<link rel="stylesheet" href="assets/style.css">
-<script defer src="assets/app.js"></script>
-
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Candidature RP - LS Midnight</title>
+  <link rel="stylesheet" href="assets/style.css" />
+  <script defer src="assets/app.js"></script>
 </head>
 <body>
 
 <header class="nav">
-<div class="container">
-<div class="nav-inner">
-
-<a class="brand" href="index.html">
-<img src="images/logo.png" class="logo-img">
-<div>
-<div class="brand-title">LS Midnight</div>
-<div class="brand-sub">Candidature RP</div>
-</div>
-</a>
-
-</div>
-</div>
+  <div class="container">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <img src="images/logo.png" alt="Logo" class="logo-img">
+        <div>
+          <div class="brand-title">LS Midnight</div>
+          <div class="brand-sub">Candidature Waitlist</div>
+        </div>
+      </a>
+      <a class="btn btn-primary" target="_blank" rel="noreferrer" href="https://discord.gg/ctzPkVGn5K">Discord</a>
+    </div>
+  </div>
 </header>
 
 <main class="main">
+  <div class="container">
+    <h1>📝 Candidature RP (Waitlist)</h1>
 
-<div class="container">
+    <div class="card" style="margin-top:16px;">
+      <form id="form">
+        <div class="row">
+          <div>
+            <label class="small">Pseudo Discord</label>
+            <input class="input" name="discord" required />
+          </div>
+          <div>
+            <label class="small">Âge</label>
+            <input class="input" name="age" type="number" min="13" max="99" required />
+          </div>
+        </div>
 
-<h1>📝 Candidature RP</h1>
+        <div style="margin-top:12px;">
+          <label class="small">Nom RP</label>
+          <input class="input" name="nomrp" required />
+        </div>
 
-<div class="card">
+        <div style="margin-top:12px;">
+          <label class="small">Motivation</label>
+          <textarea class="textarea" name="motivation" required></textarea>
+        </div>
 
-<form id="form">
+        <div style="margin-top:12px;">
+          <label class="small">Background RP</label>
+          <textarea class="textarea" name="background" required></textarea>
+        </div>
 
-<div class="row">
+        <div style="margin-top:14px;">
+          <button class="btn btn-primary" type="submit">Envoyer</button>
+        </div>
 
-<div>
-<label class="small">Pseudo Discord</label>
-<input class="input" name="discord" required>
-</div>
-
-<div>
-<label class="small">Âge</label>
-<input class="input" type="number" name="age" required>
-</div>
-
-</div>
-
-<div style="margin-top:12px">
-<label class="small">Nom RP</label>
-<input class="input" name="nomrp" required>
-</div>
-
-<div style="margin-top:12px">
-<label class="small">Motivation</label>
-<textarea class="textarea" name="motivation" required></textarea>
-</div>
-
-<div style="margin-top:12px">
-<label class="small">Background RP</label>
-<textarea class="textarea" name="background" required></textarea>
-</div>
-
-<button class="btn btn-primary" style="margin-top:15px">
-Envoyer
-</button>
-
-<div id="msg" class="small" style="margin-top:10px"></div>
-
-</form>
-
-</div>
-
-</div>
-
+        <div id="msg" class="small" style="margin-top:10px;"></div>
+      </form>
+    </div>
+  </div>
 </main>
+
+<footer class="footer">
+  <div class="container">© <span data-year></span> LS Midnight : Roleplay</div>
+</footer>
+
+<script>
+const WEBHOOK_URL = "https://discord.com/api/webhooks/1477320308351439001/mvklhBTHHPBnHnZZOEBmnFir6kFLJncOwI6OdZ8muVysyZdNs6XQtVF90mvPJmFWSRs6";
+
+document.getElementById("form").addEventListener("submit", async function(e){
+  e.preventDefault();
+  const msg = document.getElementById("msg");
+  msg.textContent = "⏳ Envoi en cours...";
+
+  const data = new FormData(this);
+
+  const payload = {
+    username: "LS Midnight • Waitlist",
+    embeds: [{
+      title: "📝 Nouvelle Candidature RP (Waitlist)",
+      color: 14423100,
+      fields: [
+        { name: "Discord", value: String(data.get("discord")) },
+        { name: "Âge", value: String(data.get("age")) },
+        { name: "Nom RP", value: String(data.get("nomrp")) },
+        { name: "Motivation", value: String(data.get("motivation")).slice(0,1024) },
+        { name: "Background", value: String(data.get("background")).slice(0,1024) }
+      ],
+      timestamp: new Date().toISOString()
+    }]
+  };
+
+  try{
+    const res = await fetch(WEBHOOK_URL,{
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify(payload)
+    });
+    if(!res.ok) throw new Error();
+    msg.textContent = "✅ Candidature envoyée !";
+    this.reset();
+  }catch{
+    msg.textContent = "❌ Erreur envoi webhook.";
+  }
+});
+</script>
 
 </body>
 </html>
