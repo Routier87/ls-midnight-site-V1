@@ -1,168 +1,161 @@
-// ===== Charger un JSON catalogue =====
 async function loadCatalogue(DATA_URL){
-  const res = await fetch(DATA_URL, { cache:"no-store" });
+  const res = await fetch(DATA_URL);
   if (!res.ok) throw new Error("Impossible de charger " + DATA_URL);
   return await res.json();
 }
 
-// ===== Sécurité HTML =====
 function escapeHtml(s){
   return String(s)
     .replaceAll("&","&amp;")
     .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+    .replaceAll(">","&gt;");
 }
 
-// ===== Format prix =====
 function formatPrice(n){
   const v = Number(n);
   if (!Number.isFinite(v)) return "—";
   return v.toLocaleString("fr-FR") + " $";
 }
 
-// ===== Normaliser catégories GTA =====
 function normalizeTag(tag){
-  const t = String(tag || "").trim().toLowerCase();
-
   const map = {
     "sports": "Sport",
     "super": "Super",
     "muscle": "Muscle",
-    "sedans": "Berlines",
+    "sedans": "Berline",
     "suvs": "SUV",
-    "coupes": "Coupés",
-    "compacts": "Compacts",
+    "coupes": "Coupé",
+    "compacts": "Compact",
     "off-road": "Offroad",
     "motorcycles": "Moto",
     "boats": "Bateau",
     "planes": "Avion",
-    "helicopters": "Hélico",
-    "industrial": "Industriel",
-    "commercial": "Commercial",
-    "vans": "Vans",
-    "utility": "Utilitaire",
-    "service": "Service",
-    "emergency": "Urgence"
+    "helicopters": "Hélico"
   };
 
-  if (map[t]) return map[t];
+  const t = String(tag||"").toLowerCase();
+  if(map[t]) return map[t];
 
-  return (tag || "")
-    .trim()
-    .replace(/\s+/g," ")
-    .replace(/^./, c => c.toUpperCase());
+  return tag || "";
 }
 
-// ===== Normaliser marque =====
-function normalizeBrand(brand){
-  return (brand || "")
-    .trim()
-    .replace(/\s+/g," ")
-    .replace(/^./, c => c.toUpperCase());
-}
+function fillTags(tagEl,data){
 
-// ===== Remplir le menu des catégories =====
-function fillTags(tagEl, data){
-  if (!tagEl) return;
-  const tags = Array.from(new Set(
-    data.map(v => normalizeTag(v.tag)).filter(Boolean)
-  )).sort((a,b) => a.localeCompare(b, "fr"));
+  const tags = [...new Set(
+    data.map(v=>normalizeTag(v.tag)).filter(Boolean)
+  )];
 
   tagEl.innerHTML =
     `<option value="">Toutes catégories</option>` +
-    tags.map(t => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join("");
+    tags.map(t=>`<option>${escapeHtml(t)}</option>`).join("");
 }
 
-// ===== Remplir le menu des marques =====
-function fillBrands(brandEl, data){
-  if (!brandEl) return;
-  const brands = Array.from(new Set(
-    data.map(v => normalizeBrand(v.brand)).filter(Boolean)
-  )).sort((a,b) => a.localeCompare(b, "fr"));
+function fillBrands(brandEl,data){
+
+  const brands = [...new Set(
+    data.map(v=>v.brand).filter(Boolean)
+  )];
 
   brandEl.innerHTML =
     `<option value="">Toutes marques</option>` +
-    brands.map(b => `<option value="${escapeHtml(b)}">${escapeHtml(b)}</option>`).join("");
+    brands.map(b=>`<option>${escapeHtml(b)}</option>`).join("");
 }
 
-// ===== Tri =====
-function sortItems(items, mode){
-  const m = (mode || "").toLowerCase();
-  if (m === "price_asc") return items.sort((a,b)=>(Number(a.price)||0)-(Number(b.price)||0));
-  if (m === "price_desc") return items.sort((a,b)=>(Number(b.price)||0)-(Number(a.price)||0));
-  if (m === "name_asc") return items.sort((a,b)=>(String(a.name||"")).localeCompare(String(b.name||""),"fr"));
-  if (m === "name_desc") return items.sort((a,b)=>(String(b.name||"")).localeCompare(String(a.name||""),"fr"));
-  return items;
-}
+function renderCatalogue({
+  data,
+  grid,
+  qEl,
+  tagEl,
+  brandEl,
+  sortEl,
+  countEl,
+  discordInvite
+}){
 
-// ===== Rendu =====
-function renderCatalogue({data, grid, qEl, tagEl, brandEl, sortEl, countEl, discordInvite}){
+  const query = (qEl?.value||"").toLowerCase();
+  const tag = (tagEl?.value||"").toLowerCase();
+  const brand = (brandEl?.value||"").toLowerCase();
+  const sort = sortEl?.value||"";
 
-  const query = (qEl?.value || "").toLowerCase().trim();
-  const selectedTag = (tagEl?.value || "").toLowerCase().trim();
-  const selectedBrand = (brandEl?.value || "").toLowerCase().trim();
-  const sortMode = (sortEl?.value || "");
+  let items = data.filter(v=>{
 
-  let items = data.filter(v => {
-    const name = String(v.name || "");
-    const brand = normalizeBrand(v.brand);
-    const tag = normalizeTag(v.tag);
+    const name = (v.name||"").toLowerCase();
+    const brandV = (v.brand||"").toLowerCase();
+    const tagV = normalizeTag(v.tag).toLowerCase();
 
-    const okSearch = !query || (name + " " + brand).toLowerCase().includes(query);
-    const okTag = !selectedTag || tag.toLowerCase() === selectedTag;
-    const okBrand = !selectedBrand || brand.toLowerCase() === selectedBrand;
+    const okSearch =
+      !query ||
+      name.includes(query) ||
+      brandV.includes(query);
+
+    const okTag =
+      !tag ||
+      tagV===tag;
+
+    const okBrand =
+      !brand ||
+      brandV===brand;
 
     return okSearch && okTag && okBrand;
+
   });
 
-  items = sortItems(items, sortMode);
+  if(sort==="price_asc")
+    items.sort((a,b)=>a.price-b.price);
 
-  if (countEl){
-    countEl.textContent = `${items.length} résultat${items.length>1?"s":""}`;
-  }
+  if(sort==="price_desc")
+    items.sort((a,b)=>b.price-a.price);
+
+  if(sort==="name_asc")
+    items.sort((a,b)=>a.name.localeCompare(b.name));
+
+  if(sort==="name_desc")
+    items.sort((a,b)=>b.name.localeCompare(a.name));
+
+  if(countEl)
+    countEl.textContent = items.length + " résultat(s)";
 
   if(!items.length){
+
     grid.innerHTML = `
       <div class="card">
         <div class="card-title">Aucun résultat</div>
-        <p class="small">Change ta recherche ou tes filtres.</p>
       </div>`;
+
     return;
   }
 
-  grid.innerHTML = items.map(v => {
-    const tag = normalizeTag(v.tag);
-    const brand = normalizeBrand(v.brand);
-    const img = v.image ? String(v.image) : "images/vehicle-placeholder.png";
+  grid.innerHTML = items.map(v=>`
 
-    return `
-      <div class="card reveal" style="padding:0; overflow:hidden;">
-        <div style="height:160px; background:rgba(255,255,255,.06); border-bottom:1px solid rgba(255,255,255,.10);">
-          <img src="${escapeHtml(img)}" alt="${escapeHtml(v.name||"Véhicule")}"
-               style="width:100%; height:100%; object-fit:cover; display:block;">
-        </div>
+    <div class="card">
 
-        <div style="padding:18px;">
-          <div class="card-title">
-            ${escapeHtml(v.name || "Sans nom")}
-            ${tag ? `<span class="badge" style="margin-left:8px;">${escapeHtml(tag)}</span>` : ""}
-          </div>
-
-          <p class="small">
-            ${escapeHtml(brand)}
-            • <b>${formatPrice(v.price)}</b>
-          </p>
-
-          <div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
-            <span class="badge">${escapeHtml(v.stock || "Disponible")}</span>
-            <a class="btn" href="${discordInvite}" target="_blank" rel="noreferrer">Contacter</a>
-          </div>
-        </div>
+      <div class="card-title">
+        ${escapeHtml(v.name)}
       </div>
-    `;
-  }).join("");
 
-  document.querySelectorAll(".reveal").forEach(el => el.classList.add("show"));
+      <p class="small">
+        ${escapeHtml(v.brand)} •
+        <b>${formatPrice(v.price)}</b>
+      </p>
+
+      <span class="badge">
+        ${normalizeTag(v.tag)}
+      </span>
+
+      <div style="margin-top:10px">
+
+        <a class="btn"
+        href="${discordInvite}"
+        target="_blank">
+
+        Contacter
+
+        </a>
+
+      </div>
+
+    </div>
+
+  `).join("");
+
 }
