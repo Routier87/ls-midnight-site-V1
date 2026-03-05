@@ -1,35 +1,85 @@
 <!doctype html>
 <html lang="fr">
 <head>
-
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-
-<title>Concessionnaire Aéroport</title>
-
-<link rel="stylesheet" href="assets/style.css">
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Concessionnaire Aéroport</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <script defer src="assets/app.js"></script>
+  <script defer src="assets/catalogue-loader.js"></script>
 </head>
-
 <body>
 
+<header class="nav">
+  <div class="container">
+    <div class="nav-inner">
+      <a class="brand" href="metiers.html">
+        <img src="images/logo.png" class="logo-img" alt="Logo">
+        <div>
+          <div class="brand-title">LS Midnight</div>
+          <div class="brand-sub">Concessionnaire Aéroport</div>
+        </div>
+      </a>
+
+      <nav class="links">
+        <a class="link" href="index.html">Accueil</a>
+        <a class="link" href="metiers.html">Concessionnaires</a>
+      </nav>
+
+      <a class="btn btn-primary" href="https://discord.gg/ctzPkVGn5K" target="_blank" rel="noreferrer">Discord</a>
+    </div>
+  </div>
+</header>
+
 <main class="main">
+  <div class="container">
+    <h1>✈ Catalogue Aéroport</h1>
+    <p class="small">Recherche + filtre + prix (JSON).</p>
 
-<div class="container">
+    <div class="card" style="margin-top:14px;">
+      <div class="row">
+        <div>
+          <label class="small">Recherche</label>
+          <input class="input" id="q" placeholder="Ex: Frogger, Luxor..." />
+        </div>
+        <div>
+          <label class="small">Filtrer par type</label>
+          <select class="select" id="tag">
+            <option value="">Tous</option>
+            <option>Avion</option>
+            <option>Hélico</option>
+            <option>Jet</option>
+          </select>
+        </div>
+      </div>
+    </div>
 
-<h1>✈ Concessionnaires Aéroport</h1>
-
-<div class="card">
-
-<p>
-Le concessionnaire aérien vend des avions et hélicoptères.
-</p>
-
-</div>
-
-</div>
-
+    <div id="grid" class="grid grid-3" style="margin-top:14px;"></div>
+  </div>
 </main>
+
+<footer class="footer">
+  <div class="container">© <span data-year></span> LS Midnight : Roleplay</div>
+</footer>
+
+<script>
+(async ()=>{
+  const grid = document.getElementById("grid");
+  const qEl = document.getElementById("q");
+  const tagEl = document.getElementById("tag");
+  const discordInvite = "https://discord.gg/ctzPkVGn5K";
+
+  try{
+    const data = await loadCatalogue("data/aeroport.json");
+    const run = ()=>renderCatalogue({data, grid, qEl, tagEl, discordInvite});
+    qEl.addEventListener("input", run);
+    tagEl.addEventListener("change", run);
+    run();
+  }catch(e){
+    grid.innerHTML = `<div class="card"><div class="card-title">Erreur catalogue</div><p class="small">${escapeHtml(e.message)}</p></div>`;
+  }
+})();
+</script>
 
 </body>
 </html>
