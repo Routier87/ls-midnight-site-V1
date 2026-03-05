@@ -1,0 +1,5 @@
+[
+  {"name":"Bati 801","brand":"Pegassi","price":35000,"tag":"Sport","stock":"Disponible"},
+  {"name":"Sanchez","brand":"Maibatsu","price":22000,"tag":"Offroad","stock":"Disponible"},
+  {"name":"Nightblade","brand":"Western","price":40000,"tag":"Custom","stock":"Sur commande"}
+]
