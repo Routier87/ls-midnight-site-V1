@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Concessionnaire Voiture</title>
+  <title>Concessionnaire Voiture - LS Midnight</title>
   <link rel="stylesheet" href="assets/style.css">
   <script defer src="assets/app.js"></script>
   <script defer src="assets/catalogue-loader.js"></script>
@@ -34,22 +34,18 @@
 <main class="main">
   <div class="container">
     <h1>🚗 Catalogue Voitures</h1>
-    <p class="small">Recherche + filtre + prix (JSON).</p>
+    <p class="small">Catalogue complet + prix GTA Online • recherche & filtre.</p>
 
     <div class="card" style="margin-top:14px;">
       <div class="row">
         <div>
           <label class="small">Recherche</label>
-          <input class="input" id="q" placeholder="Ex: Sultan, Bravado..." />
+          <input class="input" id="q" placeholder="Ex: Sultan, Pegassi..." />
         </div>
         <div>
-          <label class="small">Filtrer par type</label>
+          <label class="small">Filtrer (catégorie GTA)</label>
           <select class="select" id="tag">
-            <option value="">Tous</option>
-            <option>Sport</option>
-            <option>Muscle</option>
-            <option>Luxury</option>
-            <option>Super</option>
+            <option value="">Chargement...</option>
           </select>
         </div>
       </div>
@@ -72,6 +68,8 @@
 
   try{
     const data = await loadCatalogue("data/voitures.json");
+    fillTags(tagEl, data);
+
     const run = ()=>renderCatalogue({data, grid, qEl, tagEl, discordInvite});
     qEl.addEventListener("input", run);
     tagEl.addEventListener("change", run);
