@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Panel Admin</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+
+<body>
+
+<h1>Panel Administration</h1>
+
+<div id="panel"></div>
+
+<script>
+
+let role=localStorage.getItem("role")
+
+let panel=document.getElementById("panel")
+
+if(role=="fondateur"){
+
+panel.innerHTML=`
+<h2>Accès Fondateur</h2>
+<ul>
+<li>Gestion du site</li>
+<li>Gestion des utilisateurs</li>
+<li>Gestion des véhicules</li>
+</ul>
+`
+
+}
+
+if(role=="cofondateur"){
+
+panel.innerHTML=`
+<h2>Accès Co Fondateur</h2>
+<ul>
+<li>Gestion des candidatures</li>
+<li>Gestion des métiers</li>
+</ul>
+`
+
+}
+
+if(role=="dev"){
+
+panel.innerHTML=`
+<h2>Accès Développeur</h2>
+<ul>
+<li>Modifier le code</li>
+<li>Maintenance du site</li>
+</ul>
+`
+
+}
+
+</script>
+
+</body>
+</html>
